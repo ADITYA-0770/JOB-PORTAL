@@ -1,0 +1,60 @@
+import email
+
+from rest_framework import serializers
+from .models import Application
+from jobs.models import Job
+from accounts.models import CandidateProfile, RecruiterProfile
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = ['job', 'cover_letter', 'resume']        
+
+class ApplyJobSerializer(serializers.ModelSerializer):
+    applicant = serializers.PrimaryKeyRelatedField(read_only = True)
+    class Meta:
+        model = Application
+        fields = '__all__'
+
+    def create(self, validated_data):
+        request = self.context['request']
+        user = request.user
+        if user.role != 'candidate':
+            raise serializers.ValidationError('Only Candidate can apply for job')
+        
+        applicant = CandidateProfile.objects.get(user = user)
+        validated_data['applicant'] = applicant
+        job = validated_data['job']
+        
+        if Application.objects.filter(applicant = applicant, job = job).exists():
+            raise serializers.ValidationError('You already applied')
+        
+        return Application.objects.create(**validated_data)
+
+
+class ApplicationListSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source = 'applicant.user.first_name', read_only = True)
+    last_name = serializers.CharField(source = 'applicant.user.last_name', read_only = True)
+    email = serializers.EmailField(source = 'applicant.user.email', read_only = True)
+    phone = serializers.CharField(source = 'applicant.phone_number', read_only = True)
+    city = serializers.CharField(source = 'applicant.city', read_only = True)
+    job_title = serializers.CharField(source = 'job.title', read_only = True)
+
+    class Meta:
+        model = Application
+        fields = ['id','applied_at' ,'cover_letter', 'resume', 'status', 'first_name', 'last_name', 'email', 'phone', 'city', 'job_title']
+
+
+class ApplicationStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = ['status']      
+
+
+class ApplicationStatusViewSerializer(serializers.ModelSerializer):
+    company = serializers.CharField(source = 'RecruiterProfile.company_name', read_only = True)
+    job_title = serializers.CharField(source = 'job.title', read_only = True)
+    class Meta:
+        model = Application
+        fields = [ 'applied_at', 'status', 'company', 'job_title']      
+        
