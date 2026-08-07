@@ -3,9 +3,19 @@ from .models import Job
 from accounts.models import RecruiterProfile
 
 class JobSerializer(serializers.ModelSerializer):
+    company = serializers.CharField(source='recruiter.company_name', read_only=True)
+    has_applied = serializers.SerializerMethodField()
+
     class Meta:
         model = Job
         fields = '__all__'
+
+    def get_has_applied(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated and request.user.role == 'candidate':
+            from applications.models import Application
+            return Application.objects.filter(job=obj, applicant__user=request.user).exists()
+        return False
 
 class CreateJobSerializer(serializers.ModelSerializer):
     recruiter = serializers.PrimaryKeyRelatedField(read_only=True)

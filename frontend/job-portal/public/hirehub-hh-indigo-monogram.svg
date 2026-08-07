@@ -1,0 +1,33 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="indigo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6D67F0"/>
+      <stop offset="100%" stop-color="#4F46E5"/>
+    </linearGradient>
+    <radialGradient id="grayBg" cx="50%" cy="35%" r="80%">
+      <stop offset="0%" stop-color="#33415A"/>
+      <stop offset="100%" stop-color="#1F2937"/>
+    </radialGradient>
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="gemGlow" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Badge -->
+  <circle cx="100" cy="100" r="94" fill="url(#grayBg)" filter="url(#softShadow)"/>
+  <circle cx="100" cy="100" r="94" fill="none" stroke="url(#indigo)" stroke-width="2.5"/>
+  <circle cx="100" cy="100" r="84" fill="none" stroke="#FFFFFF" stroke-width="0.75" opacity="0.35"/>
+
+  <!-- Interlaced HH -->
+  <path d="M78 46 L94 46 L94 92 L134 92 L134 46 L150 46 L150 154 L134 154 L134 108 L94 108 L94 154 L78 154 Z"
+        fill="url(#indigo)"/>
+  <path d="M50 46 L66 46 L66 92 L106 92 L106 46 L122 46 L122 154 L106 154 L106 108 L66 108 L66 154 L50 154 Z"
+        fill="#1F2937" stroke="#FFFFFF" stroke-width="2.5"/>
+
+  <!-- gem accent -->
+  <rect x="93" y="91" width="13" height="13" fill="#FFFFFF" transform="rotate(45 100 98)" filter="url(#gemGlow)"/>
+</svg>

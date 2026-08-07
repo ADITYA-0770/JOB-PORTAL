@@ -6,5 +6,7 @@ urlpatterns = [
     path('create/', views.CreateJob, name="CreateJob"),
     path('recruiter-jobs/', views.RecruiterJobs, name="RecruiterJobs"),
     path('jobs/<int:job_id>/', views.UpdateJob, name='UpdateJob'),
-    path('jobs/<int:job_id>/toggle/', views.ToggleJobStatus, name='ToggleJobStatus')
+    path('jobs/<int:job_id>/toggle/', views.ToggleJobStatus, name='ToggleJobStatus'),
+    path('<int:job_id>/', views.JobDetail, name='JobDetail'),
+    path('<int:job_id>/delete/', views.DeleteJob, name='DeleteJob')
 ]

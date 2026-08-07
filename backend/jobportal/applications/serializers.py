@@ -8,7 +8,7 @@ from accounts.models import CandidateProfile, RecruiterProfile
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
-        fields = ['job', 'cover_letter', 'resume']        
+        fields = ['job']        
 
 class ApplyJobSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only = True)
@@ -28,6 +28,34 @@ class ApplyJobSerializer(serializers.ModelSerializer):
         
         if Application.objects.filter(applicant = applicant, job = job).exists():
             raise serializers.ValidationError('You already applied')
+        if not applicant.resume:
+            raise serializers.ValidationError({
+                "resume": "Please upload your resume first."
+            })
+
+        # About check
+        if not applicant.about:
+            raise serializers.ValidationError({
+                "about": "Please complete your profile first."
+            })
+
+        # Skills check
+        if not applicant.skills:
+            raise serializers.ValidationError({
+                "skills": "Please add your skills."
+            })
+
+        validated_data["applicant"] = applicant
+
+        job = validated_data["job"]
+
+        if Application.objects.filter(
+            applicant=applicant,
+            job=job
+        ).exists():
+            raise serializers.ValidationError(
+                "You have already applied for this job."
+            )
         
         return Application.objects.create(**validated_data)
 
@@ -39,11 +67,20 @@ class ApplicationListSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(source = 'applicant.phone_number', read_only = True)
     city = serializers.CharField(source = 'applicant.city', read_only = True)
     job_title = serializers.CharField(source = 'job.title', read_only = True)
+    cover_letter = serializers.CharField(source = 'applicant.cover_letter', read_only = True)
+    resume = serializers.SerializerMethodField()
 
     class Meta:
         model = Application
         fields = ['id','applied_at' ,'cover_letter', 'resume', 'status', 'first_name', 'last_name', 'email', 'phone', 'city', 'job_title']
 
+    def get_resume(self, obj):
+        if obj.applicant and obj.applicant.resume:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.applicant.resume.url)
+            return obj.applicant.resume.url
+        return None
 
 class ApplicationStatusSerializer(serializers.ModelSerializer):
     class Meta:

@@ -92,3 +92,10 @@ def ToggleJobStatus(request, job_id):
         job.is_open = True
     job.save()
     return Response({'message': f'Job status toggled to {"active" if job.is_open else "inactive"}'}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def JobDetail(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+    serializer = JobSerializer(job)
+    return Response(serializer.data, status=status.HTTP_200_OK)

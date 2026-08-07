@@ -5,8 +5,6 @@ from django.db import models
 class Application(models.Model):
     job = models.ForeignKey('jobs.Job', on_delete=models.CASCADE, related_name='applications')
     applicant = models.ForeignKey('accounts.candidateProfile', on_delete=models.CASCADE, related_name='applications')
-    cover_letter = models.TextField()
-    resume = models.FileField(upload_to='resumes/')
     applied_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('rejected', 'Rejected')], default='pending')
 

@@ -8,4 +8,6 @@ urlpatterns = [
     path('register/recruiter/', views.RecruiterRegistration, name='RecruiterRegistration'),
     path('login/', views.Login, name='Login'),
     path('profile/', views.Profile, name='Profile'),
+    path('profile/update/', views.UpdateCandidateProfile, name='UpdateCandidateProfile'),
+    path('profile/recruiter/update/', views.UpdateRecruiterProfile, name='UpdateRecruiterProfile'),
 ]

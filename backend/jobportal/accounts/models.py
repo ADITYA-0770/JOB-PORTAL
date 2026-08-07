@@ -49,6 +49,20 @@ class CandidateProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=20)
     city = models.CharField(max_length=100)
+    resume = models.FileField(upload_to="resumes/", null=True, blank=True)
+    cover_letter = models.TextField(blank=True)
+    headline = models.CharField(max_length=200, blank=True)
+    about  = models.TextField(blank=True)
+    skills = models.TextField(blank=True)
+    experience = models.PositiveIntegerField(default=0)
+    education = models.CharField(max_length=200, blank=True)
+    github = models.URLField(blank=True)
+    linkedin = models.URLField(blank=True)
+    profile_picture = models.ImageField(
+        upload_to="profile_pictures/",
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
@@ -58,6 +72,13 @@ class RecruiterProfile(models.Model):
     company_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20)
     city = models.CharField(max_length=100)
+    company_website = models.URLField(blank=True)
+    about = models.TextField(blank=True)
+    profile_picture = models.ImageField(
+        upload_to="profile_pictures/",
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.company_name}"

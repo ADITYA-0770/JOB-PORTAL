@@ -24,9 +24,8 @@ def ApplicationList(request):
     if user.role != 'recruiter':
         return Response({'error': 'Only recruiters can view applications'}, status=status.HTTP_403_FORBIDDEN)
     recruiter = user.recruiterprofile
-    job_ids = recruiter.jobs.values('id', flat=True)
-    applications = Application.objects.filter(job__recruiter = recruiter).select_related('applicant__user', 'job', 'applicant')
-    serializer = ApplicationListSerializer(applications, many=True)
+    applications = Application.objects.filter(job__recruiter=recruiter).select_related('applicant__user', 'job', 'applicant')
+    serializer = ApplicationListSerializer(applications, many=True, context={'request': request})
     return Response(serializer.data)
     
 @api_view(['PATCH'])
@@ -54,3 +53,4 @@ def viewApplicationStatus(request):
     applications = Application.objects.filter(applicant__user=user).select_related('job', 'applicant__user', 'applicant')
     serializer = ApplicationStatusViewSerializer(applications, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+

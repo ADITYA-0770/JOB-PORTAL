@@ -32,6 +32,11 @@ class CandidateRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(role='candidate', **validated_data)
         CandidateProfile.objects.create(user=user, phone_number=phone_number, city=city )
         return user
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Email already registered.")
+        return value
     
 class RecruiterRegistrationSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(write_only = True)
@@ -49,6 +54,11 @@ class RecruiterRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(role='recruiter', **validated_data)
         RecruiterProfile.objects.create(user=user, phone_number=phone_number, city=city, company_name=company_name)
         return user
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Email already registered.")
+        return value    
     
 
 class LoginSerializer(serializers.Serializer):
@@ -58,12 +68,21 @@ class LoginSerializer(serializers.Serializer):
 class CandidateProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CandidateProfile
-        fields = ['phone_number', 'city']
+        fields = [
+    "phone_number",
+    "city",
+    "resume",
+    "about",
+    "skills",
+    "experience",
+    "education",
+    "profile_picture",
+]   
 
 class RecruiterProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecruiterProfile
-        fields = ['phone_number', 'city', 'company_name']
+        fields = ['phone_number', 'city', 'company_name', 'company_website', 'about', 'profile_picture']
 
 
 
