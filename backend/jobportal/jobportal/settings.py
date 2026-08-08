@@ -21,9 +21,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv(
+        "ALLOWED_HOSTS",
+        "localhost,127.0.0.1,job-portal-rj70.onrender.com"
+    ).split(",")
+    if host.strip()
+]
 
 
 # Quick-start development settings - unsuitable for production
@@ -61,8 +68,9 @@ MIDDLEWARE = [
 
 
 
-CORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [    
     "http://localhost:5173",
+    "https://job-portal-rj70.onrender.com",
 ]
 
 ROOT_URLCONF = 'jobportal.urls'
