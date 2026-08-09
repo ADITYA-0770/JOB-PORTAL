@@ -71,6 +71,7 @@ FRONTEND_URL = os.getenv("FRONTEND_URL")
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://job-portal-frontend.adityapradhan0770.workers.dev",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
