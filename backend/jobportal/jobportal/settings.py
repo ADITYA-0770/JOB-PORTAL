@@ -76,11 +76,8 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
+    "https://job-portal-frontend.adityapradhan0770.workers.dev",
 ]
-
-if FRONTEND_URL:
-    CORS_ALLOWED_ORIGINS.append(FRONTEND_URL)
-    CSRF_TRUSTED_ORIGINS.append(FRONTEND_URL)
 
 ROOT_URLCONF = 'jobportal.urls'
 
