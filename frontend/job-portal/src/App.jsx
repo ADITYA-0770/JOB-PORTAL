@@ -12,6 +12,7 @@ import MyApplications from './pages/dashboard/Candidate/MyApplications.jsx'
 import PostJob from './pages/dashboard/Recruiter/PostJob.jsx'
 import MyJobs from './pages/dashboard/Recruiter/MyJobs.jsx'
 import Applications from './pages/dashboard/Recruiter/Applications.jsx'
+import ApplicationProfileView from './pages/dashboard/Recruiter/ApplicationProfileView.jsx'
 import EditJob from './pages/dashboard/Recruiter/EditJob.jsx'
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <Route path="/recruiter/edit-job/:id" element={<EditJob />} />
       <Route path="/recruiter/my-jobs" element={<MyJobs />} />
       <Route path="/recruiter/applications" element={<Applications />} />
+      <Route path="/recruiter/application/:id" element={<ApplicationProfileView />} />
       <Route path="/recruiter/profile" element={<RecruiterProfile />} />
       <Route path="/jobs/:id" element={<JobDetails />} />
       <Route path="/candidate/profile" element={<CandidateProfile />} />

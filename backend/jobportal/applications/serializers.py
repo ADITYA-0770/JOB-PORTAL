@@ -69,10 +69,23 @@ class ApplicationListSerializer(serializers.ModelSerializer):
     job_title = serializers.CharField(source = 'job.title', read_only = True)
     cover_letter = serializers.CharField(source = 'applicant.cover_letter', read_only = True)
     resume = serializers.SerializerMethodField()
+    headline = serializers.CharField(source = 'applicant.headline', read_only = True)
+    about = serializers.CharField(source = 'applicant.about', read_only = True)
+    skills = serializers.CharField(source = 'applicant.skills', read_only = True)
+    experience = serializers.IntegerField(source = 'applicant.experience', read_only = True)
+    education = serializers.CharField(source = 'applicant.education', read_only = True)
+    github = serializers.URLField(source = 'applicant.github', read_only = True)
+    linkedin = serializers.URLField(source = 'applicant.linkedin', read_only = True)
+    profile_picture = serializers.SerializerMethodField()
 
     class Meta:
         model = Application
-        fields = ['id','applied_at' ,'cover_letter', 'resume', 'status', 'first_name', 'last_name', 'email', 'phone', 'city', 'job_title']
+        fields = [
+            'id', 'applied_at', 'cover_letter', 'resume', 'status', 
+            'first_name', 'last_name', 'email', 'phone', 'city', 'job_title',
+            'headline', 'about', 'skills', 'experience', 'education', 
+            'github', 'linkedin', 'profile_picture'
+        ]
 
     def get_resume(self, obj):
         if obj.applicant and obj.applicant.resume:
@@ -80,6 +93,14 @@ class ApplicationListSerializer(serializers.ModelSerializer):
             if request:
                 return request.build_absolute_uri(obj.applicant.resume.url)
             return obj.applicant.resume.url
+        return None
+
+    def get_profile_picture(self, obj):
+        if obj.applicant and obj.applicant.profile_picture:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.applicant.profile_picture.url)
+            return obj.applicant.profile_picture.url
         return None
 
 class ApplicationStatusSerializer(serializers.ModelSerializer):

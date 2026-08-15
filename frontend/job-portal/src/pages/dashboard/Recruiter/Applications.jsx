@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, CheckCircle, XCircle, Clock, FileText, Loader2, Download } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, Clock, FileText, Loader2, Download, UserCircle } from 'lucide-react';
 import api from '../../../services/api';
 import Layout from '../../../layout/RecruiterLayout';
 
@@ -43,6 +43,14 @@ function Applications() {
 
   const getInitials = (firstName, lastName) => {
     return `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || 'NA';
+  };
+
+  const getResumeUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('/')) {
+        return `${import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000'}${url}`;
+    }
+    return url;
   };
 
   const handleUpdateStatus = async (appId, newStatus) => {
@@ -130,9 +138,16 @@ function Applications() {
                     </div>
                     
                     <div className="flex flex-wrap items-center gap-3 border-t border-[#2D2C2A]/10 md:border-t-0 pt-6 md:pt-0">
+                      <button 
+                        onClick={() => navigate(`/recruiter/application/${app.id}`, { state: { app } })}
+                        className="flex items-center gap-2 px-6 py-3 bg-transparent border-2 border-[#2c2c2c] text-[#2c2c2c] hover:bg-[#2c2c2c] hover:text-[#e8c34f] text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300"
+                      >
+                        <UserCircle size={16} strokeWidth={2.5} />
+                        VIEW PROFILE
+                      </button>
                       {app.resume && (
                         <a 
-                          href={app.resume} 
+                          href={getResumeUrl(app.resume)} 
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 px-6 py-3 bg-transparent border-2 border-[#2c2c2c] text-[#2c2c2c] hover:bg-[#2c2c2c] hover:text-[#e8c34f] text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300"

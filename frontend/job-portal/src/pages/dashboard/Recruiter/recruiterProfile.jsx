@@ -164,6 +164,14 @@ function RecruiterProfile() {
         );
     }
 
+    const getMediaUrl = (url) => {
+        if (!url) return null;
+        if (url.startsWith('/')) {
+            return `${import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000'}${url}`;
+        }
+        return url;
+    };
+
     return (
         <Layout>
             <div className="max-w-7xl mx-auto space-y-10 relative z-10 pb-12 font-sans">
@@ -192,7 +200,7 @@ function RecruiterProfile() {
                             <div className="relative group cursor-pointer" onClick={() => document.getElementById('profile-pic-upload').click()}>
                                 {profile?.profile_picture ? (
                                     <img
-                                        src={profile.profile_picture.startsWith('/') ? `http://127.0.0.1:8000${profile.profile_picture}` : profile.profile_picture}
+                                        src={getMediaUrl(profile.profile_picture)}
                                         className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-xl transition-transform duration-500 group-hover:scale-105"
                                         alt="Avatar"
                                     />

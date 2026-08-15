@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import api from "../../services/api";
 
 function Login() {
@@ -11,6 +11,7 @@ function Login() {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -118,15 +119,24 @@ function Login() {
                             <label className="block text-xs font-bold text-[#2D2C2A]/60 uppercase tracking-widest">
                                 Password
                             </label>
-                            <input
-                                type="password"
-                                name="password"
-                                required
-                                className="w-full px-0 py-3 border-b-2 border-[#2D2C2A]/10 bg-transparent outline-none focus:border-[#e8c34f] transition-colors text-[#2D2C2A] text-lg font-medium placeholder-[#2D2C2A]/30"
-                                placeholder="••••••••"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    required
+                                    className="w-full px-0 py-3 pr-10 border-b-2 border-[#2D2C2A]/10 bg-transparent outline-none focus:border-[#e8c34f] transition-colors text-[#2D2C2A] text-lg font-medium placeholder-[#2D2C2A]/30"
+                                    placeholder="••••••••"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-0 top-1/2 -translate-y-1/2 text-[#2D2C2A]/40 hover:text-[#e8c34f] transition-colors"
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
                         </div>
 
                         <div className="pt-8">
