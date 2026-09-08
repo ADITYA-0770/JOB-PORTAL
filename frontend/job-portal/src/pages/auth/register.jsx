@@ -38,9 +38,17 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (formData.password !== formData.confirm_password) {
+            setErrorMsg("Passwords do not match.");
+            return;
+        }
+
         setIsSubmitting(true);
         try {
             setErrorMsg("");
+            
+            // Only send fields that are relevant for the selected role
             const data = { 
                 first_name: formData.first_name,
                 last_name: formData.last_name,
@@ -48,8 +56,12 @@ function Register() {
                 password: formData.password,
                 phone_number: formData.phone_number,
                 city: formData.city,
-                company_name: formData.company_name,
              };
+             
+            if (role === "recruiter") {
+                data.company_name = formData.company_name;
+            }
+
             await api.post(endpoint(), data);
             navigate("/login");
         }
